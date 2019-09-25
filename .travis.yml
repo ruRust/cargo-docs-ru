@@ -1,0 +1,24 @@
+language: rust
+rust:
+- stable
+sudo: false
+before_script:
+- git config --global user.email "Igor.Shaposhnik"
+- git config --global user.name "shaposhnikigor95@bk.ru"
+script:
+- make doc
+after_success: |
+  [ $TRAVIS_BRANCH = master ] &&
+  [ $TRAVIS_PULL_REQUEST = false ] &&
+  [ $(uname -s) = Linux ] &&
+  pip install ghp-import --user $USER &&
+  $HOME/.local/bin/ghp-import -n target/doc &&
+  git push -qf https://${CDOC_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+env:
+  global:
+  - secure: dGdvTkbweREdpaRQWzq9w837ibv3rLjI2fRq+BRh/pJt3imPQa8FMw8m3OoS9p/y4GlYDSu3p+aLCktH3ulRqtC0iAzy0BhnvVG6xJhnL2YRawJiA3bz//iaLdWZVd9gnu+UR1xFYA/ZzjpDrdq+9f37uYRClonDXz9wl01WCe0AiQ69LEe4MEedYNBwhYvDK6YPoWF4X0AF42uebuCwb4xLsFwzFGt4R/xZ7MU7SAFgZxsy+xEORbP5qqRUo2kG6BHxDfJlN9V966Iw5aViK6xLUarUKYSmDtIlGeLwuI+Zjvx/ompgfaq7YSSkGoD7QIWS6v5/6nB61drIT+43oWZ87r4YuRuRthTGNSadsmnzB0YIin9RNyHm6LabF9ykLaMARJI/dSy5nMyFpEA5qrda7nxrJJPFnWX2UVsRtEyGezXSYxVqM4OftCxAIy8rHQplzGVjzHzbby+M1sCoyCtkt5jz65ii6wgH7e/el8BC4nT0h0MV2X7HMqNO7nebYgctkWtHeH6ZLfMUuL6YbHdWqFk9mFNr/4S0vBO7qK5rZRD3oqzNw2nWwwojbl1oRhsVV8kA6tSNNXCgPbK4/qlKMK0rsTkRlO09aDyZOAcjKy1AY8daAomPYTigfWBy0CF/Jt7JLdfavaElA+FykhVQLrrCENzDGI2L0wsEE9A=
+os:
+- linux
+branches:
+  only:
+  - master
